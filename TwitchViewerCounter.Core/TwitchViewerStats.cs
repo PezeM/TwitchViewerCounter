@@ -27,7 +27,7 @@ namespace TwitchViewerCounter.Core
                 return;
             }
 
-            Logger.Log($"Getting information for channel: {channelName}.");
+            Logger.Log($"Getting information for channel: {channelName}...");
             var tmiResponse = await TMIApi.GetChatterResponseAsync(channelName);
             var twitchResponse = await TwitchApi.GetResponseAsync(channelName);
             DisplayInformation(tmiResponse, twitchResponse.StreamInfo, channelName);

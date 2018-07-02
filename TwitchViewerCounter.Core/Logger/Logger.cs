@@ -12,7 +12,7 @@ namespace TwitchViewerCounter.Core
             lock (lockObj)
             {
                 var textColor = SeverityToConsoleColor(logSeverity);
-                var logMessage = $"[{DateTime.Now.ToLongTimeString()}]: {message}";
+                var logMessage = $"[{DateTime.Now,-19}]: {message}";
                 Console.ForegroundColor = textColor;
                 Console.WriteLine(logMessage);
                 Console.ResetColor();
