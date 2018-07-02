@@ -1,9 +1,11 @@
-﻿using TwitchViewerCounter.Core.Models;
+﻿using System.Threading.Tasks;
+using TwitchViewerCounter.Core.Models;
 
 namespace TwitchViewerCounter.Core.RequestHandler
 {
     public interface IRequestHandler
     {
-        TMIRequestResponse GetChatterResponse(string channelName);
+        TMIRequestResponse GetResponse(string channelName);
+        Task<TMIRequestResponse> GetChatterResponseAsync(string channelName);
     }
 }

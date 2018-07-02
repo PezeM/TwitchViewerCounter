@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{AB77C797-5636-4708-87C9-9ED8682BAED8}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>TwitchViewerCounter.Console</RootNamespace>
-    <AssemblyName>TwitchViewerCounter.Console</AssemblyName>
+    <RootNamespace>TwitchViewerCounter.ConsoleApp</RootNamespace>
+    <AssemblyName>TwitchViewerCounter.ConsoleApp</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -54,5 +54,6 @@
       <Name>TwitchViewerCounter.Core</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
