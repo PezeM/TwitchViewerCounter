@@ -2,7 +2,7 @@
 
 namespace TwitchViewerCounter.Core.Models
 {
-    public class TwitchApiRequestResponse
+    public class ChannelInformation
     {
         [DeserializeAs(Name = "stream")]
         public StreamInfo StreamInfo { get; set; }

@@ -55,11 +55,14 @@
     <Compile Include="Exceptions\InvalidClientIdException.cs" />
     <Compile Include="Logger\Logger.cs" />
     <Compile Include="Logger\LogSeverity.cs" />
+    <Compile Include="Models\Channel.cs" />
     <Compile Include="Models\Chatters.cs" />
     <Compile Include="Models\Config.cs" />
+    <Compile Include="Models\FeaturedStream.cs" />
+    <Compile Include="Models\FeaturedStreamInfo.cs" />
     <Compile Include="Models\StreamInfo.cs" />
     <Compile Include="Models\TMIRequestResponse.cs" />
-    <Compile Include="Models\TwitchApiRequestResponse.cs" />
+    <Compile Include="Models\ChannelInformation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestHandler\IRequestHandler.cs" />
     <Compile Include="RequestHandler\TMIApiRequestHandler.cs" />

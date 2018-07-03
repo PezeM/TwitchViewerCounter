@@ -43,7 +43,7 @@ namespace TwitchViewerCounter.ConsoleApp
             bool exitApp = false;
             while (!exitApp)
             {
-                Console.Write("Type twitch.tv channel name: ");
+                Console.Write("Enter Twitch.tv channel name: ");
                 var channelName = Console.ReadLine();
 
                 if (channelName == "exit")

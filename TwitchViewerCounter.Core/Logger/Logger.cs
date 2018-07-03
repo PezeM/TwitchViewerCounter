@@ -32,7 +32,7 @@ namespace TwitchViewerCounter.Core
                 case LogSeverity.Error:
                     return ConsoleColor.Red;
                 case LogSeverity.Info:
-                    return ConsoleColor.Cyan;
+                    return ConsoleColor.DarkCyan;
                 case LogSeverity.Warning:
                     return ConsoleColor.Yellow;
                 default:

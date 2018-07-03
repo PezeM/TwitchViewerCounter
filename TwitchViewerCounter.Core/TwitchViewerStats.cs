@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using TwitchViewerCounter.Core.Configuration;
 using TwitchViewerCounter.Core.Exceptions;
 using TwitchViewerCounter.Core.Models;
@@ -29,19 +30,52 @@ namespace TwitchViewerCounter.Core
 
             Logger.Log($"Getting information for channel: {channelName}...");
             var tmiResponse = await TMIApi.GetChatterResponseAsync(channelName);
-            var twitchResponse = await TwitchApi.GetResponseAsync(channelName);
-            DisplayInformation(tmiResponse, twitchResponse.StreamInfo, channelName);
+            var twitchResponse = await TwitchApi.GetChannelInformationAsync(channelName);
+            var featuredStreams = await TwitchApi.GetFeaturedStreamsAsync();
+            var featuredStream = CheckIfStreamIsFeatured(twitchResponse.StreamInfo, featuredStreams.Featured);
+            DisplayInformation(tmiResponse, twitchResponse.StreamInfo, channelName, featuredStream);
         }
 
-        private void DisplayInformation(TMIRequestResponse tmiResponse, StreamInfo streamInfo, string channel)
+        private void DisplayInformation(TMIRequestResponse tmiResponse, StreamInfo streamInfo, string channel, FeaturedStreamInfo featured)
         {
             if (tmiResponse == null || streamInfo == null)
             {
                 Logger.Log($"Can't get information for channel: {channel}.", LogSeverity.Error);
                 return;
             }
+
             var percentageOfViewersInChat = (double)tmiResponse.ChatterCount / streamInfo.Viewers;
-            Logger.Log($"Total viewers: {streamInfo.Viewers}, viewers in chat: {tmiResponse.ChatterCount}, % of people in chat: {percentageOfViewersInChat:0.0%}");
+
+            var featuredMessage = "";
+            if (featured != null)
+            {
+                featuredMessage = $"Is stream featured: Yes\n" +
+                    $"Priority in front page(from 0 to 10): {featured.Priority}\n" +
+                    $"Is stream sponsored: {featured.Sponsored}";
+            }
+
+            var message = $"Displaying information for channel: {channel}\n" +
+                $"Total viewers: {streamInfo.Viewers}\n" +
+                $"Viewers in chat: {tmiResponse.ChatterCount}\n" +
+                $"% of people in chat: {percentageOfViewersInChat:0.0%}\n" +
+                $"Live started at: {streamInfo.LiveStartedAt.ToLocalTime()}\n" +
+                featuredMessage;
+
+            Logger.Log(message);
+        }
+
+        private FeaturedStreamInfo CheckIfStreamIsFeatured(StreamInfo streamInfo, List<FeaturedStreamInfo> featured)
+        {
+            if (streamInfo == null || featured == null)
+                return null;
+
+            foreach (var featuredInfo in featured)
+            {
+                if (featuredInfo.Stream.Channel.Id == streamInfo.Channel.Id)
+                    return featuredInfo;
+            }
+
+            return null;
         }
 
         private static void CheckClientId(string clientId)
