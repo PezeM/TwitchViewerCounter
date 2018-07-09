@@ -33,6 +33,11 @@ namespace TwitchViewerCounter.Core
             var twitchResponse = await TwitchApi.GetChannelInformationAsync(channelName);
             var featuredStreams = await TwitchApi.GetFeaturedStreamsAsync();
             var featuredStream = CheckIfStreamIsFeatured(twitchResponse.StreamInfo, featuredStreams.Featured);
+
+            // Testing webhooks
+            Logger.Log("Testing webhooks.", LogSeverity.Debug);
+            await TwitchApi.TestWebhook();
+
             DisplayInformation(tmiResponse, twitchResponse.StreamInfo, channelName, featuredStream);
         }
 

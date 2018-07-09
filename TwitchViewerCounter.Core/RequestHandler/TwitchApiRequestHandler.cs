@@ -1,5 +1,7 @@
 ﻿using RestSharp;
 using System;
+using System.Net.Http;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TwitchViewerCounter.Core.Constans;
@@ -94,6 +96,23 @@ namespace TwitchViewerCounter.Core.RequestHandler
                 }
 
                 return response.Data;
+            }
+        }
+
+        public async Task TestWebhook()
+        {
+            using (var httpClient = new HttpClient())
+            {
+                using (var request = new HttpRequestMessage(new HttpMethod("POST"), "https://api.twitch.tv/helix/webhooks/hub"))
+                {
+                    request.Headers.TryAddWithoutValidation("Client-ID", "og5i89qkvg35o2ji7pxtjjqa3x0npj");
+
+                    request.Content = new StringContent("{\"hub.mode\":\"subscribe\",\n\"hub.topic\":\"https://api.twitch.tv/helix/users/follows?to_id=8822303\"," +
+                        "\n\"hub.callback\":\"https://ef16d941.ngrok.io/webhook\",\n\"hub.lease_seconds\":\"864000\"}",
+                        Encoding.UTF8, "application/json");
+
+                    var response = await httpClient.SendAsync(request);
+                }
             }
         }
     }
