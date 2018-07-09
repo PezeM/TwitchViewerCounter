@@ -11,6 +11,6 @@ namespace TwitchViewerCounter.Core.Models
         public bool Sponsored { get; set; }
 
         [DeserializeAs(Name = "stream")]
-        public StreamInfo Stream { get; set; }
+        public Stream Stream { get; set; }
     }
 }

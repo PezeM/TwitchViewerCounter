@@ -33,10 +33,12 @@ namespace TwitchViewerCounter.Core
             var twitchResponse = await TwitchApi.GetChannelInformationAsync(channelName);
             var featuredStreams = await TwitchApi.GetFeaturedStreamsAsync();
             var featuredStream = CheckIfStreamIsFeatured(twitchResponse.StreamInfo, featuredStreams.Featured);
+            var liveStreams = await TwitchApi.GetLiveStreamsInformationAsync(new string[] { "mammoth", "fabiantje" });
+
             DisplayInformation(tmiResponse, twitchResponse.StreamInfo, channelName, featuredStream);
         }
 
-        private void DisplayInformation(TMIRequestResponse tmiResponse, StreamInfo streamInfo, string channel, FeaturedStreamInfo featured)
+        private void DisplayInformation(TMIRequestResponse tmiResponse, Stream streamInfo, string channel, FeaturedStreamInfo featured)
         {
             if (tmiResponse == null || streamInfo == null)
             {
@@ -64,7 +66,7 @@ namespace TwitchViewerCounter.Core
             Logger.Log(message);
         }
 
-        private FeaturedStreamInfo CheckIfStreamIsFeatured(StreamInfo streamInfo, List<FeaturedStreamInfo> featured)
+        private FeaturedStreamInfo CheckIfStreamIsFeatured(Stream streamInfo, List<FeaturedStreamInfo> featured)
         {
             if (streamInfo == null || featured == null)
                 return null;

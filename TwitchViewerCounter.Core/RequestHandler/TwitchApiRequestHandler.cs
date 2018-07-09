@@ -1,7 +1,10 @@
 ﻿using RestSharp;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web.Caching;
 using TwitchViewerCounter.Core.Constans;
 using TwitchViewerCounter.Core.Models;
 
@@ -25,14 +28,14 @@ namespace TwitchViewerCounter.Core.RequestHandler
         /// Gets channel informations from https://api.twitch.tv/kraken/streams/{channelName}?client_id={clientId}
         /// </summary>
         /// <param name="channelName">Twitch.tv channel name</param>
-        /// <returns>Returns a<see cref="ChannelInformation"/>Channel information response</returns>
-        public ChannelInformation GetChannelInformation(string channelName)
+        /// <returns>Returns a<see cref="StreamInformation"/>Channel information response</returns>
+        public StreamInformation GetChannelInformation(string channelName)
         {
             var request = new RestRequest("{channelName}?client_id={clientId}", Method.GET);
             request.AddUrlSegment("channelName", channelName.ToLower());
             request.AddUrlSegment("clientId", ClientId);
 
-            var response = Client.Execute<ChannelInformation>(request);
+            var response = Client.Execute<StreamInformation>(request);
 
             // In case it fails, throw an exception
             if (response.ErrorException != null)
@@ -49,8 +52,8 @@ namespace TwitchViewerCounter.Core.RequestHandler
         /// Gets channel informations from https://api.twitch.tv/kraken/streams/{channelName}?client_id={clientId}
         /// </summary>
         /// <param name="channelName">Twitch.tv channel name</param>
-        /// <returns>Returns a<see cref="ChannelInformation"/>Channel information response</returns>
-        public async Task<ChannelInformation> GetChannelInformationAsync(string channelName)
+        /// <returns>Returns a<see cref="StreamInformation"/>Channel information response</returns>
+        public async Task<StreamInformation> GetChannelInformationAsync(string channelName)
         {
             var request = new RestRequest("{channelName}?client_id={clientId}", Method.GET);
             request.AddUrlSegment("channelName", channelName.ToLower());
@@ -58,7 +61,7 @@ namespace TwitchViewerCounter.Core.RequestHandler
 
             using (var cancellationTokenSource = new CancellationTokenSource())
             {
-                var response = await Client.ExecuteTaskAsync<ChannelInformation>(request, cancellationTokenSource.Token);
+                var response = await Client.ExecuteTaskAsync<StreamInformation>(request, cancellationTokenSource.Token);
 
                 // In case it fails, throw an exception
                 if (response.ErrorException != null)
@@ -79,7 +82,7 @@ namespace TwitchViewerCounter.Core.RequestHandler
         public async Task<FeaturedStream> GetFeaturedStreamsAsync()
         {
             var request = new RestRequest("featured?geo=PL&lang=pl&limit=100");
-            request.AddHeader("Client-ID", "og5i89qkvg35o2ji7pxtjjqa3x0npj");
+            request.AddHeader("Client-ID", ClientId);
 
             using (var cancellationTokenSource = new CancellationTokenSource())
             {
@@ -88,7 +91,29 @@ namespace TwitchViewerCounter.Core.RequestHandler
                 // In case it fails, throw an exception
                 if (response.ErrorException != null)
                 {
-                    var message = $"Error retrieving response.";
+                    var message = "Error retrieving response.";
+                    Logger.Log(message, LogSeverity.Error);
+                    throw new ApplicationException(message, response.ErrorException);
+                }
+
+                return response.Data;
+            }
+        }
+
+        public async Task<StreamsInformation> GetLiveStreamsInformationAsync(string[] channels)
+        {
+            var request = new RestRequest("?channel={channels}");
+            request.AddUrlSegment("channels", string.Join(",", channels));
+            request.AddHeader("Client-ID", ClientId);
+
+            using (var cancellationTokenSource = new CancellationTokenSource())
+            {
+                var response = await Client.ExecuteTaskAsync<StreamsInformation>(request, cancellationTokenSource.Token);
+
+                // In case it fails, throw an exception
+                if (response.ErrorException != null)
+                {
+                    var message = "Error retrieving response.";
                     Logger.Log(message, LogSeverity.Error);
                     throw new ApplicationException(message, response.ErrorException);
                 }
