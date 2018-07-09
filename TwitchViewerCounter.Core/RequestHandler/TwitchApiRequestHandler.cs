@@ -1,6 +1,5 @@
 ﻿using RestSharp;
 using System;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using TwitchViewerCounter.Core.Constans;
@@ -8,6 +7,9 @@ using TwitchViewerCounter.Core.Models;
 
 namespace TwitchViewerCounter.Core.RequestHandler
 {
+    /// <summary>
+    /// Base class for handling request from https://api.twitch.tv/kraken/streams/
+    /// </summary>
     public class TwitchApiRequestHandler
     {
         private RestClient Client { get; }
@@ -19,6 +21,11 @@ namespace TwitchViewerCounter.Core.RequestHandler
             ClientId = clientId;
         }
 
+        /// <summary>
+        /// Gets channel informations from https://api.twitch.tv/kraken/streams/{channelName}?client_id={clientId}
+        /// </summary>
+        /// <param name="channelName">Twitch.tv channel name</param>
+        /// <returns>Returns a<see cref="ChannelInformation"/>Channel information response</returns>
         public ChannelInformation GetChannelInformation(string channelName)
         {
             var request = new RestRequest("{channelName}?client_id={clientId}", Method.GET);
@@ -38,6 +45,11 @@ namespace TwitchViewerCounter.Core.RequestHandler
             return response.Data;
         }
 
+        /// <summary>
+        /// Gets channel informations from https://api.twitch.tv/kraken/streams/{channelName}?client_id={clientId}
+        /// </summary>
+        /// <param name="channelName">Twitch.tv channel name</param>
+        /// <returns>Returns a<see cref="ChannelInformation"/>Channel information response</returns>
         public async Task<ChannelInformation> GetChannelInformationAsync(string channelName)
         {
             var request = new RestRequest("{channelName}?client_id={clientId}", Method.GET);
@@ -60,6 +72,10 @@ namespace TwitchViewerCounter.Core.RequestHandler
             }
         }
 
+        /// <summary>
+        /// Gets list of featured streams(on front page) from https://api.twitch.tv/kraken/streams/featured?geo=PL&lang=pl&limit=100}
+        /// </summary>
+        /// <returns>Returns a<see cref="FeaturedStream"/>List of featured streamers</returns>
         public async Task<FeaturedStream> GetFeaturedStreamsAsync()
         {
             var request = new RestRequest("featured?geo=PL&lang=pl&limit=100");

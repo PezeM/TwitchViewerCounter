@@ -40,7 +40,7 @@ namespace TwitchViewerCounter.ConsoleApp
                 Environment.Exit(0);
             }
 
-            bool exitApp = false;
+            var exitApp = false;
             while (!exitApp)
             {
                 Console.Write("Enter Twitch.tv channel name: ");

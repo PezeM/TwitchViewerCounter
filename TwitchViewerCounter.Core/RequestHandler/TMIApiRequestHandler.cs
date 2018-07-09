@@ -1,5 +1,4 @@
 ﻿using RestSharp;
-using RestSharp.Extensions;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
