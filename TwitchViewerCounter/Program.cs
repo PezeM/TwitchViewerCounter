@@ -21,7 +21,7 @@ namespace TwitchViewerCounter.ConsoleApp
 
             try
             {
-                programStart.Start(programCfg.Config.ClientId);
+                await programStart.Start(programCfg.Config.ClientId);
             }
             catch (ClientIdNotSetException)
             {

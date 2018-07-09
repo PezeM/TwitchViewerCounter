@@ -12,12 +12,15 @@ namespace TwitchViewerCounter.Core
         private TwitchApiRequestHandler TwitchApi { get; set; }
         private TMIApiRequestHandler TMIApi { get; set; }
 
-        public void Start(string clientId)
+        public async Task Start(string clientId)
         {
             CheckClientId(clientId);
 
             TwitchApi = new TwitchApiRequestHandler(clientId);
             TMIApi = new TMIApiRequestHandler();
+
+            var liveStreamsCheckList = TwitchViewerCounterConfiguration.Instance.GetLiveStreamsList();
+            var liveStreams = await TwitchApi.GetLiveStreamsInformationAsync(liveStreamsCheckList.ToArray());
         }
 
         public async Task GetViewersInfoAsync(string channelName)
@@ -33,7 +36,6 @@ namespace TwitchViewerCounter.Core
             var twitchResponse = await TwitchApi.GetChannelInformationAsync(channelName);
             var featuredStreams = await TwitchApi.GetFeaturedStreamsAsync();
             var featuredStream = CheckIfStreamIsFeatured(twitchResponse.StreamInfo, featuredStreams.Featured);
-            var liveStreams = await TwitchApi.GetLiveStreamsInformationAsync(new string[] { "mammoth", "fabiantje" });
 
             DisplayInformation(tmiResponse, twitchResponse.StreamInfo, channelName, featuredStream);
         }
@@ -89,7 +91,7 @@ namespace TwitchViewerCounter.Core
                 throw new InvalidClientIdException(message);
             }
 
-            if (TwitchViewerCounterConfiguration.IsClientIdDefault(clientId))
+            if (TwitchViewerCounterConfiguration.Instance.IsClientIdDefault(clientId))
             {
                 const string message = "Client ID inside config file is default, change it!";
                 Logger.Log(message);

@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using TwitchViewerCounter.Core.Models;
 using TwitchViewerCounter.Core.Storage;
 
 namespace TwitchViewerCounter.Core.Configuration
 {
-    public class TwitchViewerCounterConfiguration
+    public sealed class TwitchViewerCounterConfiguration
     {
+        private static readonly TwitchViewerCounterConfiguration instance = new TwitchViewerCounterConfiguration(new DataStorage());
+        public static TwitchViewerCounterConfiguration Instance => instance;
+
         private const string ClientId = "PASTE-CLIENTID-HERE";
 
         public readonly Config Config;
@@ -27,6 +31,8 @@ namespace TwitchViewerCounter.Core.Configuration
             }
         }
 
-        public static bool IsClientIdDefault(string id) => id == ClientId;
+        public bool IsClientIdDefault(string id) => id == ClientId;
+
+        public List<string> GetLiveStreamsList() => Config.LiveCheckList;
     }
 }
