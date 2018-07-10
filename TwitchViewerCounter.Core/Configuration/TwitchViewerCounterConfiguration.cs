@@ -24,7 +24,8 @@ namespace TwitchViewerCounter.Core.Configuration
             {
                 Config = new Config
                 {
-                    ClientId = ClientId
+                    ClientId = ClientId,
+                    CheckInterval = 60
                 };
 
                 dataStorage.StoreObject(Config, "config");
@@ -33,6 +34,8 @@ namespace TwitchViewerCounter.Core.Configuration
 
         public bool IsClientIdDefault(string id) => id == ClientId;
 
-        public List<string> GetLiveStreamsList() => Config.LiveCheckList;
+        public List<string> GetLiveStreamsList() => Config.LiveStreamsCheckingList;
+
+        public int GetCheckInterval() => Config.CheckInterval;
     }
 }

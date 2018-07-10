@@ -1,10 +1,7 @@
 ﻿using RestSharp;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web.Caching;
 using TwitchViewerCounter.Core.Constans;
 using TwitchViewerCounter.Core.Models;
 
@@ -100,6 +97,11 @@ namespace TwitchViewerCounter.Core.RequestHandler
             }
         }
 
+        /// <summary>
+        /// Gets information for every provided channel
+        /// </summary>
+        /// <param name="channels">List of channel names</param>
+        /// <returns>Returns a <see cref="StreamsInformation"/>List of stream information</returns>
         public async Task<StreamsInformation> GetLiveStreamsInformationAsync(string[] channels)
         {
             var request = new RestRequest("?channel={channels}");

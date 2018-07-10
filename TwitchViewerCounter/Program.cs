@@ -25,17 +25,17 @@ namespace TwitchViewerCounter.ConsoleApp
             }
             catch (ClientIdNotSetException)
             {
-                Logger.Log("Set client id inside config.json file.", LogSeverity.Critical);
-                Logger.Log("Application will now exit.", LogSeverity.Critical);
-                Logger.Log("Press any key...", LogSeverity.Critical);
+                Logger.Log("Set client id inside config.json file.\n" +
+                    "Application will now exit.\n" +
+                    "Press any key...", LogSeverity.Critical);
                 Console.ReadKey();
                 Environment.Exit(0);
             }
             catch (InvalidClientIdException)
             {
-                Logger.Log("The client id inside config.json is invalid.", LogSeverity.Critical);
-                Logger.Log("Application will now exit.", LogSeverity.Critical);
-                Logger.Log("Press any key...", LogSeverity.Critical);
+                Logger.Log("The client id inside config.json is invalid.\n" +
+                        "Application will now exit.\n" +
+                        "Press any key...", LogSeverity.Critical);
                 Console.ReadKey();
                 Environment.Exit(0);
             }

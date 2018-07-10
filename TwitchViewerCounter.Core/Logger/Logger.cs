@@ -21,6 +21,10 @@ namespace TwitchViewerCounter.Core
             }
         }
 
+        /// <summary>
+        /// Change console text color depending of severity
+        /// </summary>
+        /// <returns>Console text color</returns>
         private static ConsoleColor SeverityToConsoleColor(LogSeverity severity)
         {
             switch (severity)
