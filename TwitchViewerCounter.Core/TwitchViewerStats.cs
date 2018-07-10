@@ -37,11 +37,14 @@ namespace TwitchViewerCounter.Core
             // Runs only if the check list is declared
             if (liveStreamsCheckList != null)
             {
-                // Timer that will check list of live streams to see their status
-                var checkLiveStreamsStatusTimer = new Timer(e => CheckLiveStreamsStatusAsync(liveStreamsCheckList),
-                    null, TimeSpan.Zero, TimeSpan.FromSeconds(liveCheckInterval));
+                //// Timer that will check list of live streams to see their status
+                //var checkLiveStreamsStatusTimer = new Timer(e => CheckLiveStreamsStatusAsync(liveStreamsCheckList),
+                //    null, TimeSpan.Zero, TimeSpan.FromSeconds(liveCheckInterval));
 
-                var getLiveStreamsInformationTimer = new Timer(e => GetLiveStreamsInformation(OnlineLiveStreams), null, TimeSpan.Zero, TimeSpan.FromSeconds(60));
+                //var getLiveStreamsInformationTimer = new Timer(e => GetLiveStreamsInformation(OnlineLiveStreams), null, TimeSpan.Zero, TimeSpan.FromSeconds(60));
+
+                CheckLiveStreamsStatusAsync(liveStreamsCheckList, liveCheckInterval);
+                GetLiveStreamsInformationAsync(OnlineLiveStreams, liveCheckInterval);
             }
         }
 
@@ -133,6 +136,43 @@ namespace TwitchViewerCounter.Core
             }
         }
 
+        private async Task CheckLiveStreamsStatusAsync(List<string> liveStreamsCheckList, int liveCheckInterval)
+        {
+            while (true)
+            {
+                var liveStreams = await TwitchApi.GetLiveStreamsInformationAsync(liveStreamsCheckList.ToArray());
+                Logger.Log("Running check live streams status...");
+                foreach (var live in liveStreams.StreamsInfo)
+                {
+                    if (IsLiveOnline(live) && !OnlineLiveStreams.Contains(live.Channel.Name))
+                        OnlineLiveStreams.Add(live.Channel.Name);
+                }
+
+                await Task.Delay(TimeSpan.FromSeconds(liveCheckInterval));
+            }
+        }
+
+        private async Task GetLiveStreamsInformationAsync(ObservableCollection<string> onlineLiveStreams, int liveCheckInterval)
+        {
+            while (true)
+            {
+                Logger.Log("Running get live streams information...");
+                if (onlineLiveStreams.Count != 0)
+                {
+                    foreach (var live in onlineLiveStreams)
+                    {
+                        await GetViewersInfoAsync(live);
+                    }
+                }
+
+                await Task.Delay(TimeSpan.FromSeconds(liveCheckInterval));
+            }
+        }
+
+        private bool IsLiveOnline(Stream live) => live.StreamType == "live";
+
+        #region Other version of timers
+
         private async Task GetLiveStreamsInformation(ObservableCollection<string> onlineLiveStreams)
         {
             Logger.Log("Running get live streams information...");
@@ -156,6 +196,6 @@ namespace TwitchViewerCounter.Core
             }
         }
 
-        private bool IsLiveOnline(Stream live) => live.StreamType == "live";
+        #endregion
     }
 }
