@@ -59,7 +59,8 @@ namespace TwitchViewerCounter.Core
             Logger.Log($"Getting information for channel: {channelName}...");
             var tmiResponse = await TMIApi.GetChatterResponseAsync(channelName);
             var twitchResponse = await TwitchApi.GetChannelInformationAsync(channelName);
-            var featuredStreams = await TwitchApi.GetFeaturedStreamsAsync();
+            var featuredStreams = await TwitchApi.GetFeaturedStreamsAsync(TwitchViewerCounterConfiguration.Instance.GetFeaturedStreamsLocation(),
+                TwitchViewerCounterConfiguration.Instance.GetFeaturedStreamsLanguage());
             var featuredStream = CheckIfStreamIsFeatured(twitchResponse.StreamInfo, featuredStreams.Featured);
 
             DisplayInformation(tmiResponse, twitchResponse.StreamInfo, channelName, featuredStream);

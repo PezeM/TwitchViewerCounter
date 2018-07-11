@@ -10,6 +10,16 @@ namespace TwitchViewerCounter.Core.Models
         public string ClientId { get; set; }
 
         /// <summary>
+        /// Location for checking if stream is at front page for that country
+        /// </summary>
+        public string LocationForFeaturedStreams { get; set; }
+
+        /// <summary>
+        /// Checking if stream with this language is at front page
+        /// </summary>
+        public string LanguageForFeaturedStreams { get; set; }
+
+        /// <summary>
         /// List of live streams to check if they are live. 
         /// If yes then check their statistics every CheckInterval.
         /// </summary>
