@@ -31,7 +31,8 @@ namespace TwitchViewerCounter.Core
         private void SetupTimers()
         {
             var liveStreamsCheckList = TwitchViewerCounterConfiguration.Instance.GetLiveStreamsList();
-            var liveCheckInterval = TwitchViewerCounterConfiguration.Instance.GetCheckInterval();
+            var liveCheckInterval = TwitchViewerCounterConfiguration.Instance.GetCheckIfLiveInterval();
+            var viewersInformationCheckInterval = TwitchViewerCounterConfiguration.Instance.GetCheckViewersInformationInterval();
 
             // Runs only if the check list is declared
             if (liveStreamsCheckList != null)
@@ -43,7 +44,7 @@ namespace TwitchViewerCounter.Core
                 //var getLiveStreamsInformationTimer = new Timer(e => GetLiveStreamsInformation(OnlineLiveStreams), null, TimeSpan.Zero, TimeSpan.FromSeconds(60));
 
                 CheckLiveStreamsStatusAsync(liveStreamsCheckList, liveCheckInterval);
-                GetLiveStreamsInformationAsync(OnlineLiveStreams, liveCheckInterval);
+                CheckViewersInformationAsync(OnlineLiveStreams, viewersInformationCheckInterval);
             }
         }
 
@@ -111,14 +112,14 @@ namespace TwitchViewerCounter.Core
             if (clientId?.Length == 0)
             {
                 const string message = "Client ID inside config file is empty.";
-                Logger.Log(message);
+                Logger.Log(message, LogSeverity.Critical);
                 throw new InvalidClientIdException(message);
             }
 
             if (TwitchViewerCounterConfiguration.Instance.IsClientIdDefault(clientId))
             {
                 const string message = "Client ID inside config file is default, change it!";
-                Logger.Log(message);
+                Logger.Log(message, LogSeverity.Critical);
                 throw new ClientIdNotSetException(message);
             }
         }
@@ -163,7 +164,7 @@ namespace TwitchViewerCounter.Core
             }
         }
 
-        private async Task GetLiveStreamsInformationAsync(ObservableCollection<string> onlineLiveStreams, int liveCheckInterval)
+        private async Task CheckViewersInformationAsync(ObservableCollection<string> onlineLiveStreams, int liveCheckInterval)
         {
             while (true)
             {

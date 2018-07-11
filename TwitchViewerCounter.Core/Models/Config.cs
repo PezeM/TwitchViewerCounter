@@ -16,8 +16,13 @@ namespace TwitchViewerCounter.Core.Models
         public List<string> LiveStreamsCheckingList { get; set; }
 
         /// <summary>
-        /// Live streams will be checked every CheckInterval(in seconds)
+        /// Live streams will be checked every CheckIfLiveInterval(in seconds)
         /// </summary>
-        public int CheckInterval { get; set; }
+        public int CheckIfLiveInterval { get; set; }
+
+        /// <summary>
+        /// Information about viewers will be checked every CheckViewersInformationInterval(in seconds)
+        /// </summary>
+        public int CheckViewersInformationInterval { get; set; }
     }
 }
