@@ -12,13 +12,6 @@ namespace TwitchViewerCounter.Core.RequestHandler
     /// </summary>
     public class TMIApiRequestHandler : IRequestHandler
     {
-        private RestClient Client { get; }
-
-        public TMIApiRequestHandler()
-        {
-            Client = new RestClient(ReguestConstans.TMIApiUrl);
-        }
-
         /// <summary>
         /// Gets response from http://tmi.twitch.tv/group/user/{channelName}/chatters with current chatters
         /// and theirs nickname and roles on channel.
@@ -27,17 +20,19 @@ namespace TwitchViewerCounter.Core.RequestHandler
         /// <returns>Returns a<see cref="TMIRequestResponse"/> response</returns>
         public TMIRequestResponse GetResponse(string channelName)
         {
+            var client = new RestClient(ReguestConstans.TMIApiUrl);
             var request = new RestRequest("{name}/chatters", Method.GET);
             request.AddParameter("name", channelName.ToLower(), ParameterType.UrlSegment);
 
-            var response = Client.Execute<TMIRequestResponse>(request);
+            var response = client.Execute<TMIRequestResponse>(request);
 
-            // In case it fails, throw an exception
+            // In case it fails to get response
             if (response.ErrorException != null)
             {
-                var message = $"Error retrieving response for {channelName} from tmi.twitch.tv.";
+                var message = $"Error retrieving response for {channelName} from tmi.twitch.tv." +
+                    $"\n{response.ErrorException}";
                 Logger.Log(message, LogSeverity.Error);
-                throw new ApplicationException(message, response.ErrorException);
+                return null;
             }
 
             return response.Data;
@@ -51,19 +46,22 @@ namespace TwitchViewerCounter.Core.RequestHandler
         /// <returns>Returns a<see cref="TMIRequestResponse"/> response</returns>
         public async Task<TMIRequestResponse> GetChatterResponseAsync(string channelName)
         {
+            var client = new RestClient(ReguestConstans.TMIApiUrl);
             var request = new RestRequest("{name}/chatters", Method.GET);
             request.AddParameter("name", channelName.ToLower(), ParameterType.UrlSegment);
+
             using (var cancellationTokenSource = new CancellationTokenSource())
             {
-                var response = await Client.ExecuteTaskAsync<TMIRequestResponse>(request, cancellationTokenSource.Token);
+                var response = await client.ExecuteTaskAsync<TMIRequestResponse>(request, cancellationTokenSource.Token);
                 //Client.DownloadData(request).SaveAs($"{channelName}_{DateTime.UtcNow.ToString("dd-MM-yyyy_HH-mm")}.txt");
 
-                // In case it fails, throw an exception
+                // In case it fails to get response
                 if (response.ErrorException != null)
                 {
-                    var message = $"Error retrieving response for {channelName} from tmi.twitch.tv.";
+                    var message = $"Error retrieving response for {channelName} from tmi.twitch.tv." +
+                        $"\n{response.ErrorException}";
                     Logger.Log(message, LogSeverity.Error);
-                    throw new ApplicationException(message, response.ErrorException);
+                    return null;
                 }
 
                 return response.Data;
