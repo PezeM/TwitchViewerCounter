@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitchViewerCounter.Console
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitchViewerCounter.Core", "TwitchViewerCounter.Core\TwitchViewerCounter.Core.csproj", "{6DB87FA2-0347-4206-8528-C74EB538E476}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitchViewerCounter.Tests", "TwitchViewerCounter.Tests\TwitchViewerCounter.Tests.csproj", "{BF5DA2FE-2614-4CE3-8902-63D6673B32C4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{6DB87FA2-0347-4206-8528-C74EB538E476}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6DB87FA2-0347-4206-8528-C74EB538E476}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6DB87FA2-0347-4206-8528-C74EB538E476}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF5DA2FE-2614-4CE3-8902-63D6673B32C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF5DA2FE-2614-4CE3-8902-63D6673B32C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF5DA2FE-2614-4CE3-8902-63D6673B32C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF5DA2FE-2614-4CE3-8902-63D6673B32C4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
