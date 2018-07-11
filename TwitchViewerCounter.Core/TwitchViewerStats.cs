@@ -78,7 +78,7 @@ namespace TwitchViewerCounter.Core
             var featuredMessage = "";
             if (featured != null)
             {
-                featuredMessage = $"Is stream featured: Yes\n" +
+                featuredMessage = "\nIs stream featured: Yes\n" +
                     $"Priority in front page(from 0 to 10): {featured.Priority}\n" +
                     $"Is stream sponsored: {featured.Sponsored}";
             }
@@ -87,7 +87,7 @@ namespace TwitchViewerCounter.Core
                 $"Total viewers: {streamInfo.Viewers}\n" +
                 $"Viewers in chat: {tmiResponse.ChatterCount}\n" +
                 $"% of people in chat: {percentageOfViewersInChat:0.0%}\n" +
-                $"Live started at: {streamInfo.LiveStartedAt.ToLocalTime()}\n" +
+                $"Live started at: {streamInfo.LiveStartedAt.ToLocalTime()}" +
                 featuredMessage;
 
             Logger.Log(message);

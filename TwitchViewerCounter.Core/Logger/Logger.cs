@@ -8,17 +8,24 @@ namespace TwitchViewerCounter.Core
     {
         private static readonly object lockObj = new object();
 
+        /// <summary>
+        /// Log message to file and write it to console
+        /// </summary>
+        /// <param name="message">Message to write.</param>
+        /// <param name="logSeverity">Severity of the message.</param>
         public static void Log(string message, LogSeverity logSeverity = LogSeverity.Info)
         {
             lock (lockObj)
             {
                 var textColor = SeverityToConsoleColor(logSeverity);
                 var logMessage = $"[{DateTime.Now,-19}]: {message}";
+
                 Console.ForegroundColor = textColor;
                 Console.WriteLine(logMessage);
                 Console.ResetColor();
 
-                Directory.CreateDirectory(Globals.LogsDirectoryPath);
+                if (!Directory.Exists(Globals.LogsDirectoryPath))
+                    Directory.CreateDirectory(Globals.LogsDirectoryPath);
 
                 File.AppendAllText(Globals.LogFilePath, $"{logMessage}\n");
             }
