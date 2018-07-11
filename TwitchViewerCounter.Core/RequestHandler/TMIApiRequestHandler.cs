@@ -35,7 +35,7 @@ namespace TwitchViewerCounter.Core.RequestHandler
             // In case it fails, throw an exception
             if (response.ErrorException != null)
             {
-                var message = $"Error retrieving response for {channelName}.";
+                var message = $"Error retrieving response for {channelName} from tmi.twitch.tv.";
                 Logger.Log(message, LogSeverity.Error);
                 throw new ApplicationException(message, response.ErrorException);
             }
@@ -61,7 +61,7 @@ namespace TwitchViewerCounter.Core.RequestHandler
                 // In case it fails, throw an exception
                 if (response.ErrorException != null)
                 {
-                    var message = $"Error retrieving response for {channelName}.";
+                    var message = $"Error retrieving response for {channelName} from tmi.twitch.tv.";
                     Logger.Log(message, LogSeverity.Error);
                     throw new ApplicationException(message, response.ErrorException);
                 }

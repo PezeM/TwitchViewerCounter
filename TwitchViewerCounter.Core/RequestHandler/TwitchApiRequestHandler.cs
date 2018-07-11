@@ -37,7 +37,7 @@ namespace TwitchViewerCounter.Core.RequestHandler
             // In case it fails, throw an exception
             if (response.ErrorException != null)
             {
-                var message = $"Error retrieving response for {channelName}.";
+                var message = $"Error retrieving channel information for {channelName} from api.twitch.tv/kraken.";
                 Logger.Log(message, LogSeverity.Error);
                 throw new ApplicationException(message, response.ErrorException);
             }
@@ -63,7 +63,7 @@ namespace TwitchViewerCounter.Core.RequestHandler
                 // In case it fails, throw an exception
                 if (response.ErrorException != null)
                 {
-                    var message = $"Error retrieving response for {channelName}.";
+                    var message = $"Error retrieving channel information for {channelName} from api.twitch.tv/kraken.";
                     Logger.Log(message, LogSeverity.Error);
                     throw new ApplicationException(message, response.ErrorException);
                 }
@@ -88,7 +88,7 @@ namespace TwitchViewerCounter.Core.RequestHandler
                 // In case it fails, throw an exception
                 if (response.ErrorException != null)
                 {
-                    var message = "Error retrieving response.";
+                    var message = "Error retrieving featured streams from api.twitch.tv/kraken.";
                     Logger.Log(message, LogSeverity.Error);
                     throw new ApplicationException(message, response.ErrorException);
                 }
@@ -98,7 +98,7 @@ namespace TwitchViewerCounter.Core.RequestHandler
         }
 
         /// <summary>
-        /// Gets information for every provided channel
+        /// Gets information for every provided channel from https://api.twitch.tv/kraken/streams/?channel={channels}
         /// </summary>
         /// <param name="channels">List of channel names</param>
         /// <returns>Returns a <see cref="StreamsInformation"/>List of stream information</returns>
@@ -115,7 +115,7 @@ namespace TwitchViewerCounter.Core.RequestHandler
                 // In case it fails, throw an exception
                 if (response.ErrorException != null)
                 {
-                    var message = "Error retrieving response.";
+                    var message = "Error retrieving informations about channels from api.twitch.tv/kraken.";
                     Logger.Log(message, LogSeverity.Error);
                     throw new ApplicationException(message, response.ErrorException);
                 }
