@@ -26,7 +26,9 @@ namespace TwitchViewerCounter.Core.Configuration
                 {
                     ClientId = ClientId,
                     CheckIfLiveInterval = 60,
-                    CheckViewersInformationInterval = 60
+                    CheckViewersInformationInterval = 60,
+                    LocationForFeaturedStreams = "EN",
+                    LanguageForFeaturedStreams = "en"
                 };
 
                 dataStorage.StoreObject(Config, "config");
@@ -40,5 +42,9 @@ namespace TwitchViewerCounter.Core.Configuration
         public int GetCheckIfLiveInterval() => Config.CheckIfLiveInterval;
 
         public int GetCheckViewersInformationInterval() => Config.CheckViewersInformationInterval;
+
+        public string GetFeaturedStreamsLanguage() => Config.LanguageForFeaturedStreams;
+
+        public string GetFeaturedStreamsLocation() => Config.LocationForFeaturedStreams;
     }
 }

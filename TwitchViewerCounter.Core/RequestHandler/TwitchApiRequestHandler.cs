@@ -77,11 +77,15 @@ namespace TwitchViewerCounter.Core.RequestHandler
         /// <summary>
         /// Gets list of featured streams(on front page) from https://api.twitch.tv/kraken/streams/featured?geo=PL&lang=pl&limit=100}
         /// </summary>
+        /// <param name="location">Language of the featured streams</param>
+        /// <param name="language">Location of country to get the featured streams from</param>
         /// <returns>Returns a<see cref="FeaturedStream"/>List of featured streamers</returns>
-        public async Task<FeaturedStream> GetFeaturedStreamsAsync()
+        public async Task<FeaturedStream> GetFeaturedStreamsAsync(string location, string language)
         {
             var client = new RestClient(ReguestConstans.TwitchApiUrl);
-            var request = new RestRequest("featured?geo=PL&lang=pl&limit=100");
+            var request = new RestRequest("featured?geo={location}&lang={language}&limit=100");
+            request.AddUrlSegment("location", location.ToUpper());
+            request.AddUrlSegment("language", language.ToLower());
             request.AddHeader("Client-ID", ClientId);
 
             using (var cancellationTokenSource = new CancellationTokenSource())
