@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using TwitchViewerCounter.Core.Constans;
 
 namespace TwitchViewerCounter.Core
 {
@@ -17,13 +18,16 @@ namespace TwitchViewerCounter.Core
                 Console.WriteLine(logMessage);
                 Console.ResetColor();
 
-                File.AppendAllText("log.txt", $"{logMessage}\n");
+                Directory.CreateDirectory(Globals.LogsDirectoryPath);
+
+                File.AppendAllText(Globals.LogFilePath, $"{logMessage}\n");
             }
         }
 
         /// <summary>
         /// Change console text color depending of severity
         /// </summary>
+        /// <param name="severity">Severity of the log</param>
         /// <returns>Console text color</returns>
         private static ConsoleColor SeverityToConsoleColor(LogSeverity severity)
         {
