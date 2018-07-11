@@ -21,7 +21,7 @@ namespace TwitchViewerCounter.ConsoleApp
 
             try
             {
-                await programStart.Start(programCfg.Config.ClientId);
+                await programStart.StartAsync(programCfg.Config.ClientId);
             }
             catch (ClientIdNotSetException)
             {
@@ -43,7 +43,7 @@ namespace TwitchViewerCounter.ConsoleApp
             var exitApp = false;
             while (!exitApp)
             {
-                Console.Write("Enter Twitch.tv channel name: ");
+                Console.WriteLine("Enter Twitch.tv channel name: ");
                 var channelName = Console.ReadLine();
 
                 if (channelName == "exit")

@@ -13,7 +13,7 @@ namespace TwitchViewerCounter.Core
         /// </summary>
         /// <param name="message">Message to write.</param>
         /// <param name="logSeverity">Severity of the message.</param>
-        public static void Log(string message, LogSeverity logSeverity = LogSeverity.Info)
+        public static void Log(string message, LogSeverity logSeverity = LogSeverity.Default)
         {
             lock (lockObj)
             {
@@ -41,15 +41,15 @@ namespace TwitchViewerCounter.Core
             switch (severity)
             {
                 case LogSeverity.Critical:
-                    return ConsoleColor.Red;
-                case LogSeverity.Debug:
-                    return ConsoleColor.Green;
+                    return ConsoleColor.DarkRed;
                 case LogSeverity.Error:
                     return ConsoleColor.Red;
-                case LogSeverity.Info:
-                    return ConsoleColor.DarkCyan;
                 case LogSeverity.Warning:
                     return ConsoleColor.Yellow;
+                case LogSeverity.Debug:
+                    return ConsoleColor.Green;
+                case LogSeverity.Info:
+                    return ConsoleColor.DarkCyan;
                 default:
                     return ConsoleColor.White;
             }

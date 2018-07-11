@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Threading;
 using System.Threading.Tasks;
 using TwitchViewerCounter.Core.Configuration;
 using TwitchViewerCounter.Core.Exceptions;
@@ -17,7 +16,7 @@ namespace TwitchViewerCounter.Core
         private TMIApiRequestHandler TMIApi { get; set; }
         private ObservableCollection<string> OnlineLiveStreams { get; set; }
 
-        public async Task Start(string clientId)
+        public async Task StartAsync(string clientId)
         {
             CheckClientId(clientId);
 
@@ -90,7 +89,7 @@ namespace TwitchViewerCounter.Core
                 $"Live started at: {streamInfo.LiveStartedAt.ToLocalTime()}" +
                 featuredMessage;
 
-            Logger.Log(message);
+            Logger.Log(message, LogSeverity.Info);
         }
 
         private FeaturedStreamInfo CheckIfStreamIsFeatured(Stream streamInfo, List<FeaturedStreamInfo> featured)
@@ -124,14 +123,21 @@ namespace TwitchViewerCounter.Core
             }
         }
 
-        private void OnlineLiveStreams_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private async void OnlineLiveStreams_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            Logger.Log("Running on live streams collection changed...");
             if (e.NewItems != null)
             {
-                foreach (var item in e.NewItems)
+                foreach (var stream in e.NewItems)
                 {
-                    Logger.Log($"User went live: {item}");
+                    Logger.Log($"User went live: {stream}", LogSeverity.Warning);
+                    await GetViewersInfoAsync(stream.ToString());
+                }
+            }
+            if (e.OldItems != null)
+            {
+                foreach (var stream in e.OldItems)
+                {
+                    Logger.Log($"User went offline: {stream}", LogSeverity.Warning);
                 }
             }
         }
@@ -144,8 +150,13 @@ namespace TwitchViewerCounter.Core
                 Logger.Log("Running check live streams status...");
                 foreach (var live in liveStreams.StreamsInfo)
                 {
+                    // Add stream to online streams list if it turns online
                     if (IsLiveOnline(live) && !OnlineLiveStreams.Contains(live.Channel.Name))
                         OnlineLiveStreams.Add(live.Channel.Name);
+
+                    // Remove stream from online streams list if it turns offline
+                    if (OnlineLiveStreams.Contains(live.Channel.Name) && !IsLiveOnline(live))
+                        OnlineLiveStreams.Remove(live.Channel.Name);
                 }
 
                 await Task.Delay(TimeSpan.FromSeconds(liveCheckInterval));

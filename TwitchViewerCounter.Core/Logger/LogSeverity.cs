@@ -6,6 +6,7 @@
         Warning,
         Error,
         Debug,
-        Info
+        Info,
+        Default
     }
 }
