@@ -75,6 +75,11 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\TwitchViewerCounter.Database\TwitchViewerCounter.Database.csproj">
+      <Project>{8e7ad9a0-dbdc-4544-886a-3eae8a3e0eb8}</Project>
+      <Name>TwitchViewerCounter.Database</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

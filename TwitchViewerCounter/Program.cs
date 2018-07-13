@@ -1,8 +1,10 @@
-﻿using System;
+﻿using MongoDB.Driver;
+using System;
 using System.Threading.Tasks;
 using TwitchViewerCounter.Core;
 using TwitchViewerCounter.Core.Configuration;
 using TwitchViewerCounter.Core.Exceptions;
+using TwitchViewerCounter.Core.Models;
 using TwitchViewerCounter.Core.Storage;
 
 namespace TwitchViewerCounter.ConsoleApp

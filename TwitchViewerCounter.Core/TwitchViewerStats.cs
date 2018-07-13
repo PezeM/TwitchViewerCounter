@@ -7,6 +7,9 @@ using TwitchViewerCounter.Core.Exceptions;
 using TwitchViewerCounter.Core.Models;
 using TwitchViewerCounter.Core.RequestHandler;
 using System.Collections.Specialized;
+using TwitchViewerCounter.Database;
+using TwitchViewerCounter.Database.Repositories;
+using TwitchViewerCounter.Database.Entities;
 
 namespace TwitchViewerCounter.Core
 {
@@ -62,6 +65,22 @@ namespace TwitchViewerCounter.Core
             var featuredStreams = await TwitchApi.GetFeaturedStreamsAsync(TwitchViewerCounterConfiguration.Instance.GetFeaturedStreamsLocation(),
                 TwitchViewerCounterConfiguration.Instance.GetFeaturedStreamsLanguage());
             var featuredStream = CheckIfStreamIsFeatured(twitchResponse.StreamInfo, featuredStreams.Featured);
+
+            var context = new MongoDataContext();
+            var streamerRepository = new StreamerRepository(context);
+
+            var streamer = new Streamer
+            {
+                ChannelName = twitchResponse.StreamInfo.Channel.Name,
+                Chatters = tmiResponse.ChatterCount,
+                Viewers = twitchResponse.StreamInfo.Viewers,
+                Time = DateTime.Now
+            };
+
+            await streamerRepository.SaveAsync(streamer);
+            var streamerFromDatabse = await streamerRepository.GetByIdAsync(streamer.Id);
+
+            Logger.Log($"{streamerFromDatabse.ChannelName}: Viewers {streamerFromDatabse.Viewers}, Chatters {streamerFromDatabse.Chatters}", LogSeverity.Debug);
 
             DisplayInformation(tmiResponse, twitchResponse.StreamInfo, channelName, featuredStream);
         }
