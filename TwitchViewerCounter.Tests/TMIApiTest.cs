@@ -16,7 +16,7 @@ namespace TwitchViewerCounter.Tests
             var client = new RestClient(ReguestConstans.TMIApiUrl);
             var request = new RestRequest("lirik/chatters", Method.GET);
 
-            var response = client.Execute<TMIRequestResponse>(request);
+            var response = client.Execute<ChattersInfo>(request);
 
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {

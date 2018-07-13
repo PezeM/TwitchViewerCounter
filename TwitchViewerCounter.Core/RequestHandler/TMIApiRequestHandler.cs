@@ -18,13 +18,13 @@ namespace TwitchViewerCounter.Core.RequestHandler
         /// </summary>
         /// <param name="channelName">Twitch.tv channel name</param>
         /// <returns>Returns a<see cref="TMIRequestResponse"/> response</returns>
-        public TMIRequestResponse GetResponse(string channelName)
+        public ChattersInfo GetResponse(string channelName)
         {
             var client = new RestClient(ReguestConstans.TMIApiUrl);
             var request = new RestRequest("{name}/chatters", Method.GET);
-            request.AddParameter("name", channelName.ToLower(), ParameterType.UrlSegment);
+            request.AddParameter("name", ParameterType.UrlSegment);
 
-            var response = client.Execute<TMIRequestResponse>(request);
+            var response = client.Execute<ChattersInfo>(request);
 
             // In case it fails to get response
             if (response.ErrorException != null)
@@ -44,15 +44,15 @@ namespace TwitchViewerCounter.Core.RequestHandler
         /// </summary>
         /// <param name="channelName">Twitch.tv channel name</param>
         /// <returns>Returns a<see cref="TMIRequestResponse"/> response</returns>
-        public async Task<TMIRequestResponse> GetChatterResponseAsync(string channelName)
+        public async Task<ChattersInfo> GetChatterResponseAsync(string channelName)
         {
             var client = new RestClient(ReguestConstans.TMIApiUrl);
             var request = new RestRequest("{name}/chatters", Method.GET);
-            request.AddParameter("name", channelName.ToLower(), ParameterType.UrlSegment);
+            request.AddParameter("name", channelName, ParameterType.UrlSegment);
 
             using (var cancellationTokenSource = new CancellationTokenSource())
             {
-                var response = await client.ExecuteTaskAsync<TMIRequestResponse>(request, cancellationTokenSource.Token);
+                var response = await client.ExecuteTaskAsync<ChattersInfo>(request, cancellationTokenSource.Token);
                 //Client.DownloadData(request).SaveAs($"{channelName}_{DateTime.UtcNow.ToString("dd-MM-yyyy_HH-mm")}.txt");
 
                 // In case it fails to get response

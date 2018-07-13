@@ -28,7 +28,7 @@ namespace TwitchViewerCounter.Core.RequestHandler
         {
             var client = new RestClient(ReguestConstans.TwitchApiUrl);
             var request = new RestRequest("{channelName}?client_id={clientId}", Method.GET);
-            request.AddUrlSegment("channelName", channelName.ToLower());
+            request.AddUrlSegment("channelName", channelName);
             request.AddUrlSegment("clientId", ClientId);
 
             var response = client.Execute<StreamInformation>(request);
@@ -54,7 +54,7 @@ namespace TwitchViewerCounter.Core.RequestHandler
         {
             var client = new RestClient(ReguestConstans.TwitchApiUrl);
             var request = new RestRequest("{channelName}?client_id={clientId}", Method.GET);
-            request.AddUrlSegment("channelName", channelName.ToLower());
+            request.AddUrlSegment("channelName", channelName);
             request.AddUrlSegment("clientId", ClientId);
 
             using (var cancellationTokenSource = new CancellationTokenSource())
@@ -80,7 +80,7 @@ namespace TwitchViewerCounter.Core.RequestHandler
         /// <param name="location">Language of the featured streams</param>
         /// <param name="language">Location of country to get the featured streams from</param>
         /// <returns>Returns a<see cref="FeaturedStream"/>List of featured streamers</returns>
-        public async Task<FeaturedStream> GetFeaturedStreamsAsync(string location, string language)
+        public async Task<FeaturedStreams> GetFeaturedStreamsAsync(string location, string language)
         {
             var client = new RestClient(ReguestConstans.TwitchApiUrl);
             var request = new RestRequest("featured?geo={location}&lang={language}&limit=100");
@@ -90,7 +90,7 @@ namespace TwitchViewerCounter.Core.RequestHandler
 
             using (var cancellationTokenSource = new CancellationTokenSource())
             {
-                var response = await client.ExecuteTaskAsync<FeaturedStream>(request, cancellationTokenSource.Token);
+                var response = await client.ExecuteTaskAsync<FeaturedStreams>(request, cancellationTokenSource.Token);
 
                 // In case it fails to get response
                 if (response.ErrorException != null)
