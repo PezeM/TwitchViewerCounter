@@ -28,7 +28,7 @@ namespace TwitchViewerCounter.Core.RequestHandler
         {
             var client = new RestClient(ReguestConstans.TwitchApiUrl);
             var request = new RestRequest("{channelName}?client_id={clientId}", Method.GET);
-            request.AddUrlSegment("channelName", channelName.ToLower());
+            request.AddUrlSegment("channelName", channelName);
             request.AddUrlSegment("clientId", ClientId);
 
             var response = client.Execute<StreamInformation>(request);
@@ -54,7 +54,7 @@ namespace TwitchViewerCounter.Core.RequestHandler
         {
             var client = new RestClient(ReguestConstans.TwitchApiUrl);
             var request = new RestRequest("{channelName}?client_id={clientId}", Method.GET);
-            request.AddUrlSegment("channelName", channelName.ToLower());
+            request.AddUrlSegment("channelName", channelName);
             request.AddUrlSegment("clientId", ClientId);
 
             using (var cancellationTokenSource = new CancellationTokenSource())

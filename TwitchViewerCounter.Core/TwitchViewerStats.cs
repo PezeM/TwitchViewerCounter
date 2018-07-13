@@ -10,6 +10,7 @@ using System.Collections.Specialized;
 using TwitchViewerCounter.Database;
 using TwitchViewerCounter.Database.Repositories;
 using TwitchViewerCounter.Database.Entities;
+using TwitchViewerCounter.Core.Helpers;
 
 namespace TwitchViewerCounter.Core
 {
@@ -59,28 +60,31 @@ namespace TwitchViewerCounter.Core
                 return;
             }
 
+            // Change the name to lowercase, because twitch api only works with lowercase names
+            channelName = channelName.ToLower();
+
             Logger.Log($"Getting information for channel: {channelName}...");
             var tmiResponse = await TMIApi.GetChatterResponseAsync(channelName);
             var twitchResponse = await TwitchApi.GetChannelInformationAsync(channelName);
             var featuredStreams = await TwitchApi.GetFeaturedStreamsAsync(TwitchViewerCounterConfiguration.Instance.GetFeaturedStreamsLocation(),
                 TwitchViewerCounterConfiguration.Instance.GetFeaturedStreamsLanguage());
-            var featuredStream = CheckIfStreamIsFeatured(twitchResponse.StreamInfo, featuredStreams.Featured);
+            var featuredStream = StreamHelpers.CheckIfStreamIsFeatured(twitchResponse.StreamInfo, featuredStreams.Featured);
 
-            var context = new MongoDataContext();
-            var streamerRepository = new StreamerRepository(context);
+            //var context = new MongoDataContext();
+            //var streamerRepository = new StreamerRepository(context);
 
-            var streamer = new Streamer
-            {
-                ChannelName = twitchResponse.StreamInfo.Channel.Name,
-                Chatters = tmiResponse.ChatterCount,
-                Viewers = twitchResponse.StreamInfo.Viewers,
-                Time = DateTime.Now
-            };
+            //var streamer = new Streamer
+            //{
+            //    ChannelName = twitchResponse.StreamInfo.Channel.Name,
+            //    Chatters = tmiResponse.ChatterCount,
+            //    Viewers = twitchResponse.StreamInfo.Viewers,
+            //    Time = DateTime.Now
+            //};
 
-            await streamerRepository.SaveAsync(streamer);
-            var streamerFromDatabse = await streamerRepository.GetByIdAsync(streamer.Id);
+            //await streamerRepository.SaveAsync(streamer);
+            //var streamerFromDatabse = await streamerRepository.GetByIdAsync(streamer.Id);
 
-            Logger.Log($"{streamerFromDatabse.ChannelName}: Viewers {streamerFromDatabse.Viewers}, Chatters {streamerFromDatabse.Chatters}", LogSeverity.Debug);
+            //Logger.Log($"{streamerFromDatabse.ChannelName}: Viewers {streamerFromDatabse.Viewers}, Chatters {streamerFromDatabse.Chatters}", LogSeverity.Debug);
 
             DisplayInformation(tmiResponse, twitchResponse.StreamInfo, channelName, featuredStream);
         }
@@ -111,20 +115,6 @@ namespace TwitchViewerCounter.Core
                 featuredMessage;
 
             Logger.Log(message, LogSeverity.Info);
-        }
-
-        private FeaturedStreamInfo CheckIfStreamIsFeatured(Stream streamInfo, List<FeaturedStreamInfo> featured)
-        {
-            if (streamInfo == null || featured == null)
-                return null;
-
-            foreach (var featuredInfo in featured)
-            {
-                if (featuredInfo.Stream.Channel.Id == streamInfo.Channel.Id)
-                    return featuredInfo;
-            }
-
-            return null;
         }
 
         private static void CheckClientId(string clientId)
@@ -172,11 +162,11 @@ namespace TwitchViewerCounter.Core
                 foreach (var live in liveStreams.StreamsInfo)
                 {
                     // Add stream to online streams list if it turns online
-                    if (IsLiveOnline(live) && !OnlineLiveStreams.Contains(live.Channel.Name))
+                    if (StreamHelpers.IsLiveOnline(live) && !OnlineLiveStreams.Contains(live.Channel.Name))
                         OnlineLiveStreams.Add(live.Channel.Name);
 
                     // Remove stream from online streams list if it turns offline
-                    if (OnlineLiveStreams.Contains(live.Channel.Name) && !IsLiveOnline(live))
+                    if (OnlineLiveStreams.Contains(live.Channel.Name) && !StreamHelpers.IsLiveOnline(live))
                         OnlineLiveStreams.Remove(live.Channel.Name);
                 }
 
@@ -201,8 +191,6 @@ namespace TwitchViewerCounter.Core
             }
         }
 
-        private bool IsLiveOnline(Stream live) => live.StreamType == "live";
-
         #region Other version of timers
 
         private async Task GetLiveStreamsInformation(ObservableCollection<string> onlineLiveStreams)
@@ -223,7 +211,7 @@ namespace TwitchViewerCounter.Core
             Logger.Log("Running check live streams status...");
             foreach (var live in liveStreams.StreamsInfo)
             {
-                if (IsLiveOnline(live) && !OnlineLiveStreams.Contains(live.Channel.Name))
+                if (StreamHelpers.IsLiveOnline(live) && !OnlineLiveStreams.Contains(live.Channel.Name))
                     OnlineLiveStreams.Add(live.Channel.Name);
             }
         }

@@ -22,7 +22,7 @@ namespace TwitchViewerCounter.Core.RequestHandler
         {
             var client = new RestClient(ReguestConstans.TMIApiUrl);
             var request = new RestRequest("{name}/chatters", Method.GET);
-            request.AddParameter("name", channelName.ToLower(), ParameterType.UrlSegment);
+            request.AddParameter("name", ParameterType.UrlSegment);
 
             var response = client.Execute<TMIRequestResponse>(request);
 
@@ -48,7 +48,7 @@ namespace TwitchViewerCounter.Core.RequestHandler
         {
             var client = new RestClient(ReguestConstans.TMIApiUrl);
             var request = new RestRequest("{name}/chatters", Method.GET);
-            request.AddParameter("name", channelName.ToLower(), ParameterType.UrlSegment);
+            request.AddParameter("name", channelName, ParameterType.UrlSegment);
 
             using (var cancellationTokenSource = new CancellationTokenSource())
             {
