@@ -5,7 +5,7 @@ namespace TwitchViewerCounter.Core.RequestHandler
 {
     public interface IRequestHandler
     {
-        TMIRequestResponse GetResponse(string channelName);
-        Task<TMIRequestResponse> GetChatterResponseAsync(string channelName);
+        ChattersInfo GetResponse(string channelName);
+        Task<ChattersInfo> GetChatterResponseAsync(string channelName);
     }
 }

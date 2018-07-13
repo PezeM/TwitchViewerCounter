@@ -7,7 +7,7 @@ namespace TwitchViewerCounter.Database.Entities
         public string Id { get; set; }
         public string ChannelName { get; set; }
         public DateTime Time { get; set; }
-        public DateTimeOffset LiveStartedAt { get; set; }
+        public DateTime LiveStartedAt { get; set; }
         public int Viewers { get; set; }
         public int Chatters { get; set; }
         public double PercentageOfViewersInChat { get; set; }

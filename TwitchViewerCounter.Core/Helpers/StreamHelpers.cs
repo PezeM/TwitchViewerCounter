@@ -3,9 +3,8 @@ using TwitchViewerCounter.Core.Models;
 
 namespace TwitchViewerCounter.Core.Helpers
 {
-    public class StreamHelpers
+    public static class StreamHelpers
     {
-
         public static bool IsLiveOnline(Stream live)
         {
             return live.StreamType == "live";

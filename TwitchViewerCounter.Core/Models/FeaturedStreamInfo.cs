@@ -5,7 +5,7 @@ namespace TwitchViewerCounter.Core.Models
     public class FeaturedStreamInfo
     {
         [DeserializeAs(Name = "priority")]
-        public long Priority { get; set; }
+        public int Priority { get; set; }
 
         [DeserializeAs(Name = "sponsored")]
         public bool Sponsored { get; set; }

@@ -2,7 +2,7 @@
 
 namespace TwitchViewerCounter.Core.Models
 {
-    public class TMIRequestResponse
+    public class ChattersInfo
     {
         [DeserializeAs(Name = "chatter_count")]
         public int ChatterCount { get; set; }
